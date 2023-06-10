@@ -29,7 +29,7 @@ namespace App2P2023
         public App()
         {
             InitializeComponent();
-            MainPage = new NavigationPage( new Views.PageListEmple());
+            MainPage = new NavigationPage( new Views.PageGridEmple());
         }
 
         protected override void OnStart()

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Plugin.Media;
+using System.IO;
 
 namespace App2P2023.Views
 {
@@ -14,9 +15,45 @@ namespace App2P2023.Views
     public partial class PageEmple : ContentPage
     {
         Plugin.Media.Abstractions.MediaFile photo = null;
+
+
         public PageEmple()
         {
             InitializeComponent();
+        }
+
+        public String Getimage64()
+        {
+            if(photo == null)
+            {
+                using(MemoryStream memory = new MemoryStream())
+                {
+                    Stream stream = photo.GetStream();
+                    stream.CopyTo(memory);
+                    byte[] fotobyte = memory.ToArray();
+
+                    String Base64 = Convert.ToBase64String(fotobyte);
+
+                    return Base64;
+                }
+            }
+            return null;
+        }
+
+        public byte[] GetimageBytes()
+        {
+            if (photo == null)
+            {
+                using (MemoryStream memory = new MemoryStream())
+                {
+                    Stream stream = photo.GetStream();
+                    stream.CopyTo(memory);
+                    byte[] fotobyte = memory.ToArray();
+
+                    return fotobyte;
+                }
+            }
+            return null;
         }
 
         private async void btnGuardar_Clicked(object sender, EventArgs e)
@@ -27,6 +64,7 @@ namespace App2P2023.Views
                 Apellidos = apellidos.Text,
                 FechaNac = fecha.Date,
                 Telefono = telefono.Text,
+                foto = GetimageBytes()
             };
 
             if (await App.Instancia.AddEmple(emple) > 0)
